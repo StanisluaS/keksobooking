@@ -82,6 +82,10 @@ select option:hover {
     background-color: #ff6547;
 }
 
+.hidden {
+  display: none;
+}
+
 .feature {
     box-sizing: border-box;
     width: 70px;
@@ -609,6 +613,10 @@ select option:hover {
     line-height: 16px;
 }
 
+.lodge__photos img {
+  margin: 0 1px;
+}
+
 .pin {
     position: absolute;
 
@@ -625,13 +633,18 @@ select option:hover {
     cursor: pointer;
 }
 
+.pin:focus img {
+  box-shadow: 0 0 30px rgb(128, 30, 0);
+}
+
 .pin--active {
     background-image: url("../img/pin-active.png");
 }
 
 .pin img {
-    margin-left: 8px;
-    margin-top: 8px;
+    margin-left: 3px;
+    margin-top: 3px;
+    padding: 5px;
 }
 
 .pin__main {
@@ -644,8 +657,9 @@ select option:hover {
 }
 
 .pin__main img {
-    margin-left: 17px;
-    margin-top: 15px;
+    margin-left: 7px;
+    margin-top: 5px;
+    padding: 10px;
 }
 
 .rounded {

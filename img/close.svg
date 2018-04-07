@@ -31,7 +31,7 @@
     <style>
       .cls-1 {
         fill: #353535;
-        fill-rule: evenodd;
+        fill-rule: nonzero;
       }
     </style>
   </defs>
