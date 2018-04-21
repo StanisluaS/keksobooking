@@ -25,6 +25,14 @@
   var offerDialog = document.querySelector('#offer-dialog');
   var dialogTitle = offerDialog.querySelector('.dialog__title');
   var closeDialog = offerDialog.querySelector('.dialog__close img');
+  var type = document.querySelector('#type');
+  var timein = document.querySelector('#timein');
+  var timeout = document.querySelector('#timeout');
+  var roomNumber = document.querySelector('#room_number');
+  var capacity = document.querySelector('#capacity');
+  var title = document.querySelector('#title');
+  var address = document.querySelector('#address');
+  // var noticeForm = document.querySelector('.notice__form');
   var arrayPins = [];
 
   var getRandomMinMax = function (min, max) {
@@ -84,7 +92,6 @@
   };
 
   var getPinMap = function (pinMap) {
-    // debugger;
     var div = document.createElement('div');
     var img = document.createElement('img');
     div.classList.add('pin');
@@ -139,11 +146,11 @@
     return fragment;
   };
 
-  var addInformation = function (element) {
+  var addInformation = function (element, target) {
     var offerPanel = offerDialog.querySelector('.dialog__panel');
     var lodgeElement = similarLodgeTemplate.cloneNode(true);
     lodgeElement.querySelector('.lodge__title').textContent = element.offer.title;
-    lodgeElement.querySelector('.lodge__address').textContent = element.offer.address;
+    lodgeElement.querySelector('.lodge__address').textContent = +(target.style.left.replace('px', '')) + ', ' + +(target.style.top.replace('px', ''));
     lodgeElement.querySelector('.lodge__price').textContent = element.offer.price + '\u20BD' + '/ночь';
     lodgeElement.querySelector('.lodge__type').textContent = getTypeLodge(element.offer.type);
     lodgeElement.querySelector('.lodge__rooms-and-guests').textContent = 'Для ' + element.offer.guests + ' гостей в ' + element.offer.rooms + ' комнатах';
@@ -153,8 +160,6 @@
     dialogTitle.querySelector('img').setAttribute('src', element.author.avatar);
     offerDialog.replaceChild(lodgeElement, offerPanel);
   };
-
-  // addInformation(makeArray(getRandomNumber, getRandomMinMax, getFeatures)[2]);
 
   var onEnterPress = function (evt) {
     if (evt.keyCode === ENTER_KEYCODE && evt.currentTarget.className === 'pin') {
@@ -206,7 +211,7 @@
     }
     target.parentElement.classList.add('pin--active');
     var element = arrayPins[findIndex(target, arrayPins)];
-    addInformation(element);
+    addInformation(element, target.parentElement);
     offerDialog.classList.remove('hidden');
     closeDialog.addEventListener('click', closeOfferDialog);
     closeDialog.parentElement.addEventListener('keydown', onEnterPress);
@@ -222,5 +227,104 @@
   };
 
   onClickPin();
+
+  // ф-ция синхронизации времени заезда и выезда
+  var changeTime = function (evt) {
+    if (evt.currentTarget === timein) {
+      timeout.selectedIndex = timein.selectedIndex;
+    } else {
+      timein.selectedIndex = timeout.selectedIndex;
+    }
+  };
+
+  // ф-ция установки мин. цены в зависимости от типа жилья
+  var setPrice = function (evt) {
+    var elem = document.querySelector('#price');
+    switch (evt.target.value) {
+      case 'bungalo':
+        elem.setAttribute('value', '0');
+        elem.setAttribute('min', '0');
+        break;
+
+      case 'flat':
+        elem.setAttribute('value', '1000');
+        elem.setAttribute('min', '1000');
+        break;
+
+      case 'house':
+        elem.setAttribute('value', '5000');
+        elem.setAttribute('min', '5000');
+        break;
+
+      case 'palace':
+        elem.setAttribute('value', '10000');
+        elem.setAttribute('min', '10000');
+        break;
+    }
+  };
+
+  // ф-ция синхронизации кол-ва гостей и кол-ва комнат
+  var setRooms = function (evt) {
+    if (evt.currentTarget === roomNumber) {
+      switch (evt.target.value) {
+        case '1':
+          capacity.selectedIndex = roomNumber.selectedIndex;
+          break;
+        case '2':
+          capacity.selectedIndex = getRandomNumber(2);
+          break;
+        case '3':
+          capacity.selectedIndex = getRandomNumber(3);
+          break;
+        default:
+          capacity.selectedIndex = 3;
+          break;
+      }
+    } else {
+      switch (evt.target.value) {
+        case '0':
+          roomNumber.selectedIndex = 3;
+          break;
+        case '1':
+          roomNumber.selectedIndex = getRandomNumber(3);
+          break;
+        case '2':
+          roomNumber.selectedIndex = getRandomMinMax(1, 2);
+          break;
+        default:
+          roomNumber.selectedIndex = capacity.selectedIndex;
+          break;
+      }
+    }
+  };
+
+  // волидация формы
+  var makeRedFrame = function (evt) {
+    if (!evt.target.validity.valid) {
+      evt.target.style.borderColor = 'red';
+      evt.target.style.borderWidth = '1.5px';
+    }
+  };
+
+  var looksForm = function (evt) {
+    evt.target.style.borderColor = '';
+    evt.target.style.borderWidth = '';
+  };
+
+  // сброс значений формы
+  // var resetForm = function () {
+  //   noticeForm.reset();
+  // };
+
+  timeout.addEventListener('change', changeTime);
+  timein.addEventListener('change', changeTime);
+  type.addEventListener('change', setPrice);
+  roomNumber.addEventListener('change', setRooms);
+  capacity.addEventListener('change', setRooms);
+  title.addEventListener('invalid', makeRedFrame);
+  address.addEventListener('invalid', makeRedFrame);
+  title.addEventListener('input', looksForm);
+  address.addEventListener('input', looksForm);
+  // noticeForm.addEventListener('submit', resetForm);
 
 })();
