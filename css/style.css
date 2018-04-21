@@ -66,12 +66,12 @@ input[type=text], input[type=number], select, textarea {
 }
 
 input[type=text]:hover, input[type=number]:hover, select:hover, textarea:hover {
-    border-color: #ffaa99;
+    border-color: #2035f3;
 }
 
 input[type=text]:focus, input[type=number]:focus, select:focus, textarea:focus {
     outline: none;
-    box-shadow: 0 0 4px 1px #ff6547;
+    box-shadow: 0 0 4px 1px #20acf3;
 }
 
 select {
